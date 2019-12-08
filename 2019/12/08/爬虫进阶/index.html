@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="你还要我怎样" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://ywypython.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="代理服务器1234567891011- 定义：可以接受请求并将其转发- 匿名度：	1.透明：知道你使用了代理，并且知道你的真实ip	2.匿名：知道你使用了代理但是不知道你的真实ip	3.高匿：啥也不知道- 类型：http  https- 免费代理	1.www.goubanjia.com	2.快代理	3.西刺代理	4.http:&#x2F;&#x2F;http.zhiliandaili.cn&#x2F;  使用方法示例12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫进阶">
+<meta property="og:url" content="http:&#x2F;&#x2F;ywypython.github.io&#x2F;2019&#x2F;12&#x2F;08&#x2F;%E7%88%AC%E8%99%AB%E8%BF%9B%E9%98%B6&#x2F;index.html">
+<meta property="og:site_name" content="你还要我怎样">
+<meta property="og:description" content="代理服务器1234567891011- 定义：可以接受请求并将其转发- 匿名度：	1.透明：知道你使用了代理，并且知道你的真实ip	2.匿名：知道你使用了代理但是不知道你的真实ip	3.高匿：啥也不知道- 类型：http  https- 免费代理	1.www.goubanjia.com	2.快代理	3.西刺代理	4.http:&#x2F;&#x2F;http.zhiliandaili.cn&#x2F;  使用方法示例12345">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-08T15:25:24.916Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ywypython.github.io/2019/12/08/%E7%88%AC%E8%99%AB%E8%BF%9B%E9%98%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>爬虫进阶 | 你还要我怎样</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你还要我怎样</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">我尚未开口你先笑场.</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">9</span></a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ywypython.github.io/2019/12/08/%E7%88%AC%E8%99%AB%E8%BF%9B%E9%98%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ywy">
+      <meta itemprop="description" content="我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你还要我怎样">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          爬虫进阶
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-08 23:25:33 / 修改时间：23:25:24" itemprop="dateCreated datePublished" datetime="2019-12-08T23:25:33+08:00">2019-12-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="代理服务器"><a href="#代理服务器" class="headerlink" title="代理服务器"></a>代理服务器</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>定义：可以接受请求并将其转发</span><br><span class="line"><span class="bullet">- </span>匿名度：</span><br><span class="line"><span class="code">	1.透明：知道你使用了代理，并且知道你的真实ip</span></span><br><span class="line"><span class="code">	2.匿名：知道你使用了代理但是不知道你的真实ip</span></span><br><span class="line"><span class="code">	3.高匿：啥也不知道</span></span><br><span class="line"><span class="bullet">- </span>类型：http  https</span><br><span class="line"><span class="bullet">- </span>免费代理</span><br><span class="line"><span class="code">	1.www.goubanjia.com</span></span><br><span class="line"><span class="code">	2.快代理</span></span><br><span class="line"><span class="code">	3.西刺代理</span></span><br><span class="line"><span class="code">	4.http://http.zhiliandaili.cn/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用方法示例"><a href="#使用方法示例" class="headerlink" title="使用方法示例"></a>使用方法示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- 当代理服务器ip为一个时:</span><br><span class="line">    可在请求proxies的参数字典中添加代理服务器的<span class="string">'type'</span>:<span class="string">'ip：port'</span></span><br><span class="line">request.get(url,headers,proxies=&#123;<span class="string">'type'</span>:<span class="string">'ip:port'</span>&#125;)</span><br><span class="line"></span><br><span class="line">- 当代理服务器的ip为多个时:</span><br><span class="line">    代理池：可定义一个代理列表，每个列表中存储代理服务器的字典如：</span><br><span class="line">proxy_list = [</span><br><span class="line">    &#123;<span class="string">'https'</span>:<span class="string">'121.231.94.44:8888'</span>&#125;,</span><br><span class="line">    &#123;<span class="string">'https'</span>:<span class="string">'131.231.94.44:8888'</span>&#125;,</span><br><span class="line">    &#123;<span class="string">'https'</span>:<span class="string">'141.231.94.44:8888'</span>&#125;</span><br><span class="line">]</span><br><span class="line">requests.get(url,headers=headers,proxies=random.choice(proxy_list)).text</span><br></pre></td></tr></table></figure>
+
+<h3 id="例子爬取西祠代理"><a href="#例子爬取西祠代理" class="headerlink" title="例子爬取西祠代理"></a>例子爬取西祠代理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#爬取西刺代理</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span>,</span><br><span class="line">    <span class="string">'Connection'</span>:<span class="string">"close"</span></span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">'https://www.xicidaili.com/nn/%d'</span></span><br><span class="line">proxy_list_http = []</span><br><span class="line">proxy_list_https = []</span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">20</span>):</span><br><span class="line">    new_url = format(url%page)</span><br><span class="line">    ip_port = random.choice(ip_list)</span><br><span class="line">    page_text = requests.get(new_url,headers=headers,proxies=&#123;<span class="string">'https'</span>:ip_port&#125;).text</span><br><span class="line">    tree = etree.HTML(page_text)</span><br><span class="line">    <span class="comment">#tbody不可以出现在xpath表达式中</span></span><br><span class="line">    tr_list = tree.xpath(<span class="string">'//*[@id="ip_list"]//tr'</span>)[<span class="number">1</span>:]</span><br><span class="line">    <span class="keyword">for</span> tr <span class="keyword">in</span> tr_list:</span><br><span class="line">        ip = tr.xpath(<span class="string">'./td[2]/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">        port = tr.xpath(<span class="string">'./td[3]/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">        t_type = tr.xpath(<span class="string">'./td[6]/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">        ips = ip+<span class="string">':'</span>+port</span><br><span class="line">        <span class="keyword">if</span> t_type == <span class="string">'HTTP'</span>:</span><br><span class="line">            dic = &#123;</span><br><span class="line">                t_type: ips</span><br><span class="line">            &#125;</span><br><span class="line">            proxy_list_http.append(dic)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            dic = &#123;</span><br><span class="line">                t_type:ips</span><br><span class="line">            &#125;</span><br><span class="line">            proxy_list_https.append(dic)</span><br><span class="line">print(len(proxy_list_http),len(proxy_list_https))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测代理ip是否可用</span></span><br><span class="line"><span class="keyword">for</span> ip <span class="keyword">in</span> proxy_list_http:</span><br><span class="line">    response = requests.get(<span class="string">'https://www/sogou.com'</span>,headers=headers,proxies=&#123;<span class="string">'https'</span>:ip&#125;)</span><br><span class="line">    <span class="keyword">if</span> response.status_code == <span class="string">'200'</span>:</span><br><span class="line">        print(<span class="string">'检测到了可用ip'</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="cookie处理"><a href="#cookie处理" class="headerlink" title="cookie处理"></a>cookie处理</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>原因:一些网站访问时需要带cookie值</span><br><span class="line"><span class="code">		如一般网站设置访问首页产生cookie，所以一些链接点击时也带有cookie值</span></span><br><span class="line"><span class="bullet">- </span>解决办法</span><br><span class="line"><span class="code">	1.手动处理：将cookie封装到headers中(利用抓包工具),一般用于cookie没有有效时长并且不变化。</span></span><br><span class="line"><span class="code">	2.自动处理：session对象。可以创建一个session对象，该对象可以像requests一样进行请求发送。不同之处在于如果在使用session进行请求发送的过程中产生了cookie，则cookie会被自动存储在session对象中。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p> <strong>对雪球网中的新闻数据进行爬取<a href="https://xueqiu.com/" target="_blank" rel="noopener">https://xueqiu.com/</a></strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">方式一：</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="comment"># 可手动设置cookie值，先访问首页，然后通过抓包工具进行捕获cookie值，然后再headers中添加其对应的键值对</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span>,</span><br><span class="line"><span class="comment">#     'Cookie':'aliyungf_tc=AQAAAAl2aA+kKgkAtxdwe3JmsY226Y+n; acw_tc=2760822915681668126047128e605abf3a5518432dc7f074b2c9cb26d0aa94; xq_a_token=75661393f1556aa7f900df4dc91059df49b83145; xq_r_token=29fe5e93ec0b24974bdd382ffb61d026d8350d7d; u=121568166816578; device_id=24700f9f1986800ab4fcc880530dd0ed'</span></span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">'https://xueqiu.com/v4/statuses/public_timeline_by_category.json?since_id=-1&amp;max_id=20349203&amp;count=15&amp;category=-1'</span></span><br><span class="line">page_text = requests.get(url=url,headers=headers).json()</span><br><span class="line">print(page_text)</span><br></pre></td></tr></table></figure>
+
+<p>方式二(推荐使用):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">使用s = request.Session 先访问首页，然后其他访问页面都是基于s的访问,而s带有首页产生的cookie。</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">session = requests.Session()</span><br><span class="line">session.get(<span class="string">'https://xueqiu.com'</span>,headers=headers)</span><br><span class="line"></span><br><span class="line">url = <span class="string">'https://xueqiu.com/v4/statuses/public_timeline_by_category.json?since_id=-1&amp;max_id=20349203&amp;count=15&amp;category=-1'</span></span><br><span class="line">page_text = session.get(url=url,headers=headers).json()</span><br><span class="line">print(page_text)</span><br></pre></td></tr></table></figure>
+
+<h2 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h2><h3 id="验证码的识别"><a href="#验证码的识别" class="headerlink" title="验证码的识别"></a>验证码的识别</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>验证识别的几个网站</span><br><span class="line"><span class="code">	1.超级鹰</span></span><br><span class="line"><span class="code">		步骤：创建一个软件：899370；下载实例代码</span></span><br><span class="line"><span class="code">	2.打码兔</span></span><br><span class="line"><span class="code">	3.云打码</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载实例代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> md5</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Chaojiying_Client</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, username, password, soft_id)</span>:</span></span><br><span class="line">        self.username = username</span><br><span class="line">        password =  password.encode(<span class="string">'utf8'</span>)</span><br><span class="line">        self.password = md5(password).hexdigest()</span><br><span class="line">        self.soft_id = soft_id</span><br><span class="line">        self.base_params = &#123;</span><br><span class="line">            <span class="string">'user'</span>: self.username,</span><br><span class="line">            <span class="string">'pass2'</span>: self.password,</span><br><span class="line">            <span class="string">'softid'</span>: self.soft_id,</span><br><span class="line">        &#125;</span><br><span class="line">        self.headers = &#123;</span><br><span class="line">            <span class="string">'Connection'</span>: <span class="string">'Keep-Alive'</span>,</span><br><span class="line">            <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'</span>,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">PostPic</span><span class="params">(self, im, codetype)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        im: 图片字节</span></span><br><span class="line"><span class="string">        codetype: 题目类型 参考 http://www.chaojiying.com/price.html</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'codetype'</span>: codetype,</span><br><span class="line">        &#125;</span><br><span class="line">        params.update(self.base_params)</span><br><span class="line">        files = &#123;<span class="string">'userfile'</span>: (<span class="string">'ccc.jpg'</span>, im)&#125;</span><br><span class="line">        r = requests.post(<span class="string">'http://upload.chaojiying.net/Upload/Processing.php'</span>, data=params, files=files, headers=self.headers)</span><br><span class="line">        <span class="keyword">return</span> r.json()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ReportError</span><span class="params">(self, im_id)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        im_id:报错题目的图片ID</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'id'</span>: im_id,</span><br><span class="line">        &#125;</span><br><span class="line">        params.update(self.base_params)</span><br><span class="line">        r = requests.post(<span class="string">'http://upload.chaojiying.net/Upload/ReportError.php'</span>, data=params, headers=self.headers)</span><br><span class="line">        <span class="keyword">return</span> r.json()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 识别古诗文中的验证码：</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tranformImgData</span><span class="params">(imgPath,t_type)</span>:</span></span><br><span class="line">    chaojiying = Chaojiying_Client(<span class="string">'bobo328410948'</span>, <span class="string">'bobo328410948'</span>, <span class="string">'899370'</span>)</span><br><span class="line">    im = open(imgPath, <span class="string">'rb'</span>).read()</span><br><span class="line">    <span class="keyword">return</span> chaojiying.PostPic(im, t_type)[<span class="string">'pic_str'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#模拟登陆</span></span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">'https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx'</span></span><br><span class="line">page_text = s.get(url,headers=headers).text</span><br><span class="line">tree = etree.HTML(page_text)</span><br><span class="line">img_src = <span class="string">'https://so.gushiwen.org'</span>+tree.xpath(<span class="string">'//*[@id="imgCode"]/@src'</span>)[<span class="number">0</span>]</span><br><span class="line">img_data = s.get(img_src,headers=headers).content</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./code.jpg'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    fp.write(img_data)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#动态获取变化的请求参数</span></span><br><span class="line">	<span class="string">'''</span></span><br><span class="line"><span class="string">	 下面俩个值是隐藏在页面form表单下的input标签，所以post提交的时候也会提交其默认值，所以我们要获取其值作为参数一并提交过去。</span></span><br><span class="line"><span class="string">	'''</span></span><br><span class="line">__VIEWSTATE = tree.xpath(<span class="string">'//*[@id="__VIEWSTATE"]/@value'</span>)[<span class="number">0</span>]</span><br><span class="line">__VIEWSTATEGENERATOR = tree.xpath(<span class="string">'//*[@id="__VIEWSTATEGENERATOR"]/@value'</span>)[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">code_text = tranformImgData(<span class="string">'./code.jpg'</span>,<span class="number">1004</span>)</span><br><span class="line">print(code_text)</span><br><span class="line">login_url = <span class="string">'https://so.gushiwen.org/user/login.aspx?from=http%3a%2f%2fso.gushiwen.org%2fuser%2fcollect.aspx'</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'__VIEWSTATE'</span>: __VIEWSTATE,</span><br><span class="line">    <span class="string">'__VIEWSTATEGENERATOR'</span>: __VIEWSTATEGENERATOR,</span><br><span class="line">    <span class="string">'from'</span>:<span class="string">'http://so.gushiwen.org/user/collect.aspx'</span>,</span><br><span class="line">    <span class="string">'email'</span>: <span class="string">'www.zhangbowudi@qq.com'</span>,</span><br><span class="line">    <span class="string">'pwd'</span>: <span class="string">'bobo328410948'</span>,</span><br><span class="line">    <span class="string">'code'</span>: code_text,</span><br><span class="line">    <span class="string">'denglu'</span>: <span class="string">'登录'</span>,</span><br><span class="line">&#125;</span><br><span class="line">page_text = s.post(url=login_url,headers=headers,data=data).text</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'login.html'</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    fp.write(page_text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="模拟登录的问题点"><a href="#模拟登录的问题点" class="headerlink" title="模拟登录的问题点"></a>模拟登录的问题点</h3><h4 id="验证码问题（即上述问题）"><a href="#验证码问题（即上述问题）" class="headerlink" title="验证码问题（即上述问题）"></a>验证码问题（即上述问题）</h4><h4 id="变化的请求参数的动态获取"><a href="#变化的请求参数的动态获取" class="headerlink" title="变化的请求参数的动态获取"></a>变化的请求参数的动态获取</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">隐藏在页面form表单下的input标签，提交表单的时候也会提交其默认值，所以我们要动态的获取其默认值作为参数一并提交过去。</span><br></pre></td></tr></table></figure>
+
+<h4 id="cookie的问题"><a href="#cookie的问题" class="headerlink" title="cookie的问题"></a>cookie的问题</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.当发现问题cookie问题时最后考虑的，先考虑前两项</span><br><span class="line">2.一般我们都或用动态的方法获取cookie</span><br><span class="line">3.设置cookie的页面不定，所以我们最好在请求时都用requests.Session(url).get(url)的形式，避免因何处生成cookie而使我们获取不到指定的值。</span><br></pre></td></tr></table></figure>
+
+<h2 id="爬虫时间效率优化"><a href="#爬虫时间效率优化" class="headerlink" title="爬虫时间效率优化"></a>爬虫时间效率优化</h2><h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 服务端</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="meta">@app.route('/index')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'hello'</span></span><br><span class="line"><span class="meta">@app.route('/index1')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index1</span><span class="params">()</span>:</span></span><br><span class="line">    sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'hello1'</span></span><br><span class="line"><span class="meta">@app.route('/index2')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index2</span><span class="params">()</span>:</span></span><br><span class="line">    sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'hello1'</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run()</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment"># 客户端</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool</span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"></span><br><span class="line">urls = [</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/index'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/index1'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/index2'</span>,</span><br><span class="line"></span><br><span class="line">]</span><br><span class="line"><span class="comment"># 目标函数即主函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_requset</span><span class="params">(url)</span>:</span></span><br><span class="line">    page_text = requests.get(url).text</span><br><span class="line">    print(page_text)</span><br><span class="line"><span class="comment"># 线程池</span></span><br><span class="line">pool = Pool(<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 利用map把每个url传递给目标函数</span></span><br><span class="line">pool.map(get_requset,urls)</span><br><span class="line"><span class="comment"># 查看用时</span></span><br><span class="line">print(time.time()-start_time)</span><br></pre></td></tr></table></figure>
+
+<h3 id="单线程-多任务异步协程"><a href="#单线程-多任务异步协程" class="headerlink" title="单线程+多任务异步协程 !"></a>单线程+多任务异步协程 !</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">相关概念</span><br><span class="line">-</span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>协程概念</span><br><span class="line"><span class="code">    在函数（特殊的函数）定义的时候，如果使用了async修饰的话，则该函数调用后会返回一个协程对象，并且函数内部的实现语句不会被立即执行</span></span><br><span class="line"><span class="bullet">- </span>任务对象</span><br><span class="line"><span class="code">    1.任务对象就是对协程对象的进一步封装。任务对象==高级的协程对象==特殊的函数</span></span><br><span class="line"><span class="code">    2.任务对象必须要注册到事件循环对象中</span></span><br><span class="line"><span class="code">    3.给任务对象绑定回调：爬虫的数据解析中使用</span></span><br><span class="line"><span class="bullet">- </span>事件循环</span><br><span class="line"><span class="code">    1.一个存放任务对象的容器</span></span><br><span class="line"><span class="code">    2.启动事件循环后，它会对其内部存储的任务对象进行一步的执行</span></span><br><span class="line"><span class="bullet">- </span>aiohttp:支持异步网络请求的模块</span><br></pre></td></tr></table></figure>
+
+<p><strong>多任务的异步协程例子</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 多任务的异步协程</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start = time.time()</span><br><span class="line"><span class="comment">#在特殊函数内部的实现中不可以出现不支持异步的模块代码</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_request</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    print(<span class="string">'下载成功:'</span>,url)</span><br><span class="line"></span><br><span class="line">urls = [</span><br><span class="line">    <span class="string">'www.1.com'</span>,</span><br><span class="line">    <span class="string">'www.2.com'</span></span><br><span class="line">]</span><br><span class="line">tasks = []</span><br><span class="line"><span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">    c = get_request(url)</span><br><span class="line">    task = asyncio.ensure_future(c)</span><br><span class="line">    tasks.append(task)</span><br><span class="line"><span class="comment"># 事件循环对象</span></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="comment"># 执行时间循环对象</span></span><br><span class="line">	<span class="comment"># 注意：挂起操作需要手动处理</span></span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">print(time.time()-start)</span><br></pre></td></tr></table></figure>
+
+<p><strong>在爬虫中的应用</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计时</span></span><br><span class="line">start = time.time()</span><br><span class="line">urls = [</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/bobo'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/jay'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/tom'</span>,</span><br><span class="line">	<span class="string">'http://127.0.0.1:5000/bobo'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/jay'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/tom'</span>,</span><br><span class="line">	<span class="string">'http://127.0.0.1:5000/bobo'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/jay'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/tom'</span>,</span><br><span class="line">	<span class="string">'http://127.0.0.1:5000/bobo'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/jay'</span>,</span><br><span class="line">    <span class="string">'http://127.0.0.1:5000/tom'</span></span><br><span class="line">]</span><br><span class="line"><span class="comment">#特殊的函数：请求发送和响应数据的捕获</span></span><br><span class="line"><span class="comment">#细节：在每一个with前加上async，在每一个阻塞操作的前边加上await</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_request</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> s:</span><br><span class="line">        <span class="comment">#s.get(url,headers,proxy="http://ip:port",params)</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> <span class="keyword">await</span> s.get(url) <span class="keyword">as</span> response:</span><br><span class="line">            page_text = <span class="keyword">await</span> response.text()<span class="comment">#read()返回的是byte类型的数据</span></span><br><span class="line">            <span class="keyword">return</span> page_text</span><br><span class="line"><span class="comment">#回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(task)</span>:</span></span><br><span class="line">    <span class="comment"># 获取特殊函数的返回值</span></span><br><span class="line">    page_text = task.result()</span><br><span class="line">    </span><br><span class="line">    tree = etree.HTML(page_text)</span><br><span class="line">    parse_data = tree.xpath(<span class="string">'//li/text()'</span>)</span><br><span class="line">    print(parse_data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建任务列表</span></span><br><span class="line">tasks = []</span><br><span class="line"><span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">    c = get_request(url)</span><br><span class="line">    task = asyncio.ensure_future(c)</span><br><span class="line">    <span class="comment"># 绑定方法回调函数</span></span><br><span class="line">    task.add_done_callback(parse)</span><br><span class="line">    tasks.append(task)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 事件循环</span></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="comment"># 开启事件循环并挂起任务</span></span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line"></span><br><span class="line">print(time.time()-start)</span><br></pre></td></tr></table></figure>
+
+<h4 id="单线程-多协程注意问题"><a href="#单线程-多协程注意问题" class="headerlink" title="单线程+多协程注意问题"></a>单线程+多协程注意问题</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span></span><br><span class="line"><span class="code">	1.在async标记的特殊函数中不能出现不支持异步模块的代码，如time.sleep(可以替换成await asyncio.sleep)，否则会中断异步效果。</span></span><br><span class="line"><span class="code">	2.在所有的with前都需要加上 async</span></span><br><span class="line"><span class="code">	3.发送请求要使用aiohttp模块的方法(其他方法(requests,urllib)不支持异步)</span></span><br><span class="line"><span class="code">	4.在发生阻塞的地方前加上 await,意思是等待这一块代码执行完才能执行下一步.注意：response.text() 或者.content .json() 也属于阻塞，也需要加上 await</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="爬取的数据地址动态变化的（js）"><a href="#爬取的数据地址动态变化的（js）" class="headerlink" title="爬取的数据地址动态变化的（js）"></a>爬取的数据地址动态变化的（js）</h2><p>爬取梨视频体育专栏最热视频</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://www.pearvideo.com/category_9</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">难点：我们点击进入视频页，视频内容是通过js动态加载的，所以我们不能直接访问拿到视频对应的地址，得从js中找到其对应的地址值位置，然后发出请求并获得响应数据.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">'https://www.pearvideo.com/category_9'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 访问体育专栏并获得响应数据</span></span><br><span class="line">page_text = requests.get(url=url,headers=headers).text</span><br><span class="line"><span class="comment"># 通过xpath获得所有最热视频对应标签</span></span><br><span class="line">tree = etree.HTML(page_text)</span><br><span class="line">li_list = tree.xpath(<span class="string">'//*[@id="listvideoListUl"]/li'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> li <span class="keyword">in</span> li_list:</span><br><span class="line">    <span class="comment">#　找到视频名字</span></span><br><span class="line">    video_name = li.xpath(<span class="string">'./div/a/div[2]/text()'</span>)[<span class="number">0</span>] + <span class="string">'.mp4'</span></span><br><span class="line">    <span class="comment"># 找到视频视频页详情地址</span></span><br><span class="line">    video_src = <span class="string">'https://www.pearvideo.com/'</span> + li.xpath(<span class="string">'./div/a/@href'</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 访问视频详情页</span></span><br><span class="line">    video_text = requests.get(video_src,headers=headers).text</span><br><span class="line">	<span class="comment">###！！！！！！！！！！！</span></span><br><span class="line">    <span class="comment"># 利用正则获取视频的地址</span></span><br><span class="line">    mp4_src = re.findall(<span class="string">'ldUrl="",srcUrl="(.*?)",vdoUrl='</span>,video_text)[<span class="number">0</span>]</span><br><span class="line">	<span class="comment"># 访问拿到视频数据</span></span><br><span class="line">    mp4_data = requests.get(mp4_src,headers=headers).content</span><br><span class="line">    mp4_path = <span class="string">'hot_video/'</span>+video_name</span><br><span class="line">	<span class="comment"># 永久存储</span></span><br><span class="line">    <span class="keyword">with</span> open(mp4_path,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(mp4_data)</span><br><span class="line">    print(video_name,<span class="string">'下载完成！'</span>)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/requests%E6%A8%A1%E5%9D%97/" rel="prev" title="requests模块">
+      <i class="fa fa-chevron-left"></i> requests模块
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/08/scrapy%E6%A1%86%E6%9E%B6/" rel="next" title="scrapy框架">
+      scrapy框架 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理服务器"><span class="nav-number">1.</span> <span class="nav-text">代理服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方法示例"><span class="nav-number">1.1.</span> <span class="nav-text">使用方法示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子爬取西祠代理"><span class="nav-number">1.2.</span> <span class="nav-text">例子爬取西祠代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cookie处理"><span class="nav-number">2.</span> <span class="nav-text">cookie处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟登录"><span class="nav-number">3.</span> <span class="nav-text">模拟登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证码的识别"><span class="nav-number">3.1.</span> <span class="nav-text">验证码的识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟登录的问题点"><span class="nav-number">3.2.</span> <span class="nav-text">模拟登录的问题点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证码问题（即上述问题）"><span class="nav-number">3.2.1.</span> <span class="nav-text">验证码问题（即上述问题）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变化的请求参数的动态获取"><span class="nav-number">3.2.2.</span> <span class="nav-text">变化的请求参数的动态获取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">cookie的问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬虫时间效率优化"><span class="nav-number">4.</span> <span class="nav-text">爬虫时间效率优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程"><span class="nav-number">4.1.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单线程-多任务异步协程"><span class="nav-number">4.2.</span> <span class="nav-text">单线程+多任务异步协程 !</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单线程-多协程注意问题"><span class="nav-number">4.2.1.</span> <span class="nav-text">单线程+多协程注意问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬取的数据地址动态变化的（js）"><span class="nav-number">5.</span> <span class="nav-text">爬取的数据地址动态变化的（js）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ywy</p>
+  <div class="site-description" itemprop="description">我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ywy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='150' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="你还要我怎样" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://ywypython.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Scrapy框架pyppeteer框架不常用——基于asyncio实现的，存在的问题较多 123456789101112- 框架：异步框架(Twisted)	就是一个具有很强通用性且集成了很多功能的项目模板(可以被应用在各种需求中)- 优点：	1.高性能的数据解析操作(xpath)	2.高性能的数据下载	3.高性能的持久化存储	4.中间件	5.全栈数据爬取操作	6.分布式：redis	7.请求传参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy框架">
+<meta property="og:url" content="http:&#x2F;&#x2F;ywypython.github.io&#x2F;2019&#x2F;12&#x2F;08&#x2F;scrapy%E6%A1%86%E6%9E%B6&#x2F;index.html">
+<meta property="og:site_name" content="你还要我怎样">
+<meta property="og:description" content="Scrapy框架pyppeteer框架不常用——基于asyncio实现的，存在的问题较多 123456789101112- 框架：异步框架(Twisted)	就是一个具有很强通用性且集成了很多功能的项目模板(可以被应用在各种需求中)- 优点：	1.高性能的数据解析操作(xpath)	2.高性能的数据下载	3.高性能的持久化存储	4.中间件	5.全栈数据爬取操作	6.分布式：redis	7.请求传参">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-08T15:27:50.796Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ywypython.github.io/2019/12/08/scrapy%E6%A1%86%E6%9E%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>scrapy框架 | 你还要我怎样</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你还要我怎样</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">我尚未开口你先笑场.</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">9</span></a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ywypython.github.io/2019/12/08/scrapy%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ywy">
+      <meta itemprop="description" content="我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你还要我怎样">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          scrapy框架
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-08 23:28:02 / 修改时间：23:27:50" itemprop="dateCreated datePublished" datetime="2019-12-08T23:28:02+08:00">2019-12-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Scrapy框架"><a href="#Scrapy框架" class="headerlink" title="Scrapy框架"></a>Scrapy框架</h1><p>pyppeteer框架不常用——基于asyncio实现的，存在的问题较多</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>框架：异步框架(Twisted)</span><br><span class="line"><span class="code">	就是一个具有很强通用性且集成了很多功能的项目模板(可以被应用在各种需求中)</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>优点：</span><br><span class="line"><span class="code">	1.高性能的数据解析操作(xpath)</span></span><br><span class="line"><span class="code">	2.高性能的数据下载</span></span><br><span class="line"><span class="code">	3.高性能的持久化存储</span></span><br><span class="line"><span class="code">	4.中间件</span></span><br><span class="line"><span class="code">	5.全栈数据爬取操作</span></span><br><span class="line"><span class="code">	6.分布式：redis</span></span><br><span class="line"><span class="code">	7.请求传参的机制(深度爬取)</span></span><br><span class="line"><span class="code">	8.可以合理的应用selenium</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="环境的安装"><a href="#环境的安装" class="headerlink" title="环境的安装"></a>环境的安装</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Linux：</span><br><span class="line"><span class="code">      pip3 install scrapy</span></span><br><span class="line">Windows：</span><br><span class="line"><span class="code">      a. pip3 install wheel</span></span><br><span class="line"><span class="code">      b. 下载twisted http://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted</span></span><br><span class="line"><span class="code">      c. 进入下载目录，执行pip3 install Twisted-19.10.0-cp36-cp36m-win32.whl</span></span><br><span class="line">(scrapy借助这个组件实现异步)</span><br><span class="line"><span class="code">      d. pip3 install pywin32</span></span><br><span class="line"><span class="code">      e. pip3 install scrapy</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="基本使用方法"><a href="#基本使用方法" class="headerlink" title="基本使用方法"></a>基本使用方法</h2><h3 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>在终端执行：scrapy startproject ProjectName</span><br><span class="line"><span class="code">	创建成功后会生成：</span></span><br><span class="line"><span class="code">		1.一个包（包含spiders包,items等）</span></span><br><span class="line"><span class="code">		2.scrapy.cfg(配置文件，不要动)</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>创建成功后切换工作目录：cd ProjectName</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建爬虫文件"><a href="#创建爬虫文件" class="headerlink" title="创建爬虫文件"></a>创建爬虫文件</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>在spiders包中创建爬虫文件，命令为：</span><br><span class="line"><span class="code">	scrapy genspider SpiderName www.起始路径.com(随意写，可更改)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="爬虫文件的简单内容"><a href="#爬虫文件的简单内容" class="headerlink" title="爬虫文件的简单内容"></a>爬虫文件的简单内容</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySpiderSpider</span><span class="params">(scrapy.Spider)</span>:</span></span><br><span class="line">    <span class="comment"># 爬虫文件的名称：爬虫原文件的唯一标识</span></span><br><span class="line">    name = <span class="string">'my_spider'</span></span><br><span class="line">    <span class="comment"># 允许的域名</span></span><br><span class="line">    allowed_domains = [<span class="string">'www.xxx.com'</span>]</span><br><span class="line">    <span class="comment"># 起始的url列表：列表中的列表元素会被scrapy自动的进行请求发送</span></span><br><span class="line">    start_urls = [<span class="string">'http://www.xxx.com/'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析数据</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="解析数据中的xpath使用"><a href="#解析数据中的xpath使用" class="headerlink" title="解析数据中的xpath使用"></a>解析数据中的xpath使用</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>parse 函数中的response.xpath 返回的是Selector对象，不能直接[索引]取值</span><br><span class="line"><span class="code">	需要使用如下方法：</span></span><br><span class="line"><span class="code">    extract():列表是有多个列表元素</span></span><br><span class="line"><span class="code">    extract_first():列表元素只有单个</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h4><h5 id="1-基于终端指令"><a href="#1-基于终端指令" class="headerlink" title="1.基于终端指令"></a>1.基于终端指令</h5><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>局限性：只可以将parse方法的返回值存储到磁盘文件中</span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>存储的内容：parse 解析函数的返回值 </span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>存储的命令：scrapy crawl SpiderName -o file.csv </span><br><span class="line"><span class="code">	注意：</span></span><br><span class="line"><span class="code">	1.文件名的后缀有局限性只可以有如下后缀名：'json', 'jsonlines', </span></span><br><span class="line"><span class="code">	’jl', 'csv', 'xml', 'marshal', 'pickle'</span></span><br><span class="line"><span class="bullet">	2.  </span>Spider 只能存储, BaseItem, dict or None 或者 列表中套字典</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-基于管道（重点）"><a href="#2-基于管道（重点）" class="headerlink" title="2.基于管道（重点）"></a>2.基于管道（重点）</h5><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>管道文件 pipelines.py</span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>专门用于持久化存储</span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>会用到items.py中的类</span><br><span class="line"><span class="code">	class DemoItem(scrapy.Item):</span></span><br><span class="line"><span class="code">    # define the fields for your item here like:</span></span><br><span class="line"><span class="code">    # name = scrapy.Field()</span></span><br><span class="line"><span class="code">    pass</span></span><br><span class="line"><span class="code">    上述代码的意思是我们在数据解析时遇到需要存储的内容，就在这个类中定义一个字段，Field()就是一个万能的数据类型</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="基于管道的编码流程"><a href="#基于管道的编码流程" class="headerlink" title="基于管道的编码流程"></a><strong>基于管道的编码流程</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">- <span class="number">1.</span>数据解析</span><br><span class="line"></span><br><span class="line">- <span class="number">2.</span>在item的类中定义相关的属性，如：</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">DemoItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    	content = scrapy.Field()</span><br><span class="line">- <span class="number">3.</span>导入items中类，实例化对象，并将解析的数据存储到item类型的对象中，如：</span><br><span class="line">	<span class="comment"># 导包</span></span><br><span class="line">	<span class="keyword">from</span> demo.items <span class="keyword">import</span> DemoItem	</span><br><span class="line">	content = li.xpath(<span class="string">'./a/text()'</span>).extract_first()</span><br><span class="line">	<span class="comment"># 实例化对象</span></span><br><span class="line">    item = DemoItem()</span><br><span class="line">    <span class="comment"># 将数据封装到对象的属性中</span></span><br><span class="line">    item[<span class="string">'content'</span>] = content</span><br><span class="line">    </span><br><span class="line">- <span class="number">4.</span>将item提交给管道</span><br><span class="line">		<span class="keyword">yield</span> item</span><br><span class="line"></span><br><span class="line">- <span class="number">5.</span>pipelines中的类中的process_item方法一旦被调用就可以接收一个item对象，然后对item进行任意形式的存储</span><br><span class="line">	<span class="comment"># 第一种方式：存储到磁盘中</span></span><br><span class="line">    	<span class="string">'''</span></span><br><span class="line"><span class="string">    	注意：不能直接在process_item方法中with open 文件，这样会打开多次。</span></span><br><span class="line"><span class="string">    	'''</span></span><br><span class="line">		<span class="class"><span class="keyword">class</span> <span class="title">DemoPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line">			<span class="comment"># 定义打开文件的文件句柄</span></span><br><span class="line">            fp = <span class="literal">None</span></span><br><span class="line">			<span class="comment"># 重构父类方法，只再项目开启执行一次</span></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">				<span class="comment"># 在执行此函数时打开文件</span></span><br><span class="line">                self.fp = open(<span class="string">'data.txt'</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">				<span class="comment"># 取出item中封存的属性内容</span></span><br><span class="line">                content = item[<span class="string">'content'</span>]</span><br><span class="line">                <span class="comment"># 写入文件</span></span><br><span class="line">                self.fp.write(content)</span><br><span class="line">                </span><br><span class="line">                <span class="string">'''</span></span><br><span class="line"><span class="string">                注意：如果有多个管道类，即要存储到不同的地方，如mysql，redis等，一定要记得return item，这样其他管道类才会按照优先级接收到item，否则将接收不到item，无法完成存储。              </span></span><br><span class="line"><span class="string">                '''</span></span><br><span class="line">                <span class="keyword">return</span> item</span><br><span class="line">            </span><br><span class="line">			<span class="comment"># 重构父类方法，在项目完成后执行一次</span></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">				<span class="comment"># 关闭文件句柄</span></span><br><span class="line">                self.fp.close()</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 第二种方式：存到mysql中</span></span><br><span class="line">    	在数据库中创建表结构,并创建对应字段</span><br><span class="line">        在pipelines.py中</span><br><span class="line">        <span class="keyword">import</span> pymysql</span><br><span class="line">        </span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">mysqlPipeLine</span><span class="params">(object)</span>:</span></span><br><span class="line">            <span class="comment"># 初始连接和游标</span></span><br><span class="line">            conn = <span class="literal">None</span></span><br><span class="line">            cursor = <span class="literal">None</span></span><br><span class="line">            </span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">                <span class="comment"># 在项目开始时连接数据库</span></span><br><span class="line">                self.conn = pymysql.Connect(host=<span class="string">'127.0.0.1'</span>,port=<span class="number">3306</span>,user=<span class="string">'root'</span>,password=<span class="string">'123'</span>,db=<span class="string">'Spider'</span>,charset=<span class="string">'utf8'</span>)</span><br><span class="line">                </span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self,item,spider)</span>:</span></span><br><span class="line">                <span class="comment"># 向表中插入sql语句</span></span><br><span class="line">                sql = <span class="string">'insert into huya values("%s","%s","%s")'</span>%(item[<span class="string">'title'</span>],item[<span class="string">'author'</span>],item[<span class="string">'hot'</span>])</span><br><span class="line">                <span class="comment"># 获取游标</span></span><br><span class="line">                self.cursor = self.conn.cursor()</span><br><span class="line">                <span class="comment"># 实现类似事务的功能，发生错误发生回滚而不是插入</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="comment"># 执行sql语句</span></span><br><span class="line">                    self.cursor.execute(sql)</span><br><span class="line">                    <span class="comment"># 提交并刷新</span></span><br><span class="line">                    self.conn.commit()</span><br><span class="line">                <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                    print(e)</span><br><span class="line">                    <span class="comment"># 发生错误回滚</span></span><br><span class="line">                    self.conn.rollback()</span><br><span class="line">                <span class="comment"># 多个管道，必须要返回item(优先级最低的可以不用)</span></span><br><span class="line">                <span class="keyword">return</span> item</span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">                <span class="comment"># 项目完成关闭游标和连接</span></span><br><span class="line">                self.cursor.close()</span><br><span class="line">                self.conn.close()</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 第三种方式：redis存储</span></span><br><span class="line">    	<span class="keyword">from</span> redis <span class="keyword">import</span> Redis</span><br><span class="line">    	<span class="class"><span class="keyword">class</span> <span class="title">RedisPipeLine</span><span class="params">(object)</span>:</span></span><br><span class="line">            conn = <span class="literal">None</span></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">                self.conn = Redis(host=<span class="string">'127.0.0.1'</span>,port=<span class="number">6379</span>)</span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self,item,spider)</span>:</span></span><br><span class="line">                <span class="comment"># redis的列表增加操作</span></span><br><span class="line">                self.conn.lpush(<span class="string">'huyaList'</span>,item)</span><br><span class="line">                <span class="keyword">return</span> item</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">- <span class="number">6.</span>在配置文件中开启管道</span><br><span class="line">	如：开启多个管道</span><br><span class="line">	ITEM_PIPELINES = &#123;</span><br><span class="line">        <span class="comment"># 前面为我们在pipelines.py中定义的类，后面数字为优先级，数字越小，优先级越高</span></span><br><span class="line">   		<span class="string">'demo.pipelines.DemoPipeline'</span>: <span class="number">300</span>,</span><br><span class="line">        <span class="string">'demo.pipelines.mysqlPipeLine'</span>: <span class="number">301</span>,</span><br><span class="line">        <span class="string">'demo.pipelines.RedisPipeLine'</span>: <span class="number">302</span>,</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 注意</span></span><br><span class="line">- 管道文件中的一个管道类表示将数据存储到某一种形式的平台中。</span><br><span class="line">- 如果管道文件中定义了多个管道类，爬虫类提交的item会给到优先级最高的管道类。</span><br><span class="line">- process_item方法的实现中的<span class="keyword">return</span> item的操作表示将item传递给下一个即将被执行的管道类</span><br><span class="line">- 解决redis版本问题：redis的模块需要使用<span class="number">2.10</span><span class="number">.6</span>，不能用高版本</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 管道方式</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        div_list = response.xpath(<span class="string">'/html/body/main/div/div/div[1]/div/div[2]/div[1]'</span>)</span><br><span class="line">        <span class="keyword">for</span> div <span class="keyword">in</span> div_list:</span><br><span class="line"></span><br><span class="line">            content = div.xpath(<span class="string">'./div/div/div[1]/a/text()'</span>).extract_first()</span><br><span class="line">            item = FirstbloodItem()</span><br><span class="line">            item[<span class="string">'content'</span>] = content</span><br><span class="line">            </span><br><span class="line">            print(content) </span><br><span class="line"></span><br><span class="line">            <span class="keyword">yield</span> item <span class="comment">#将item对象提交给管道</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="配置settings文件"><a href="#配置settings文件" class="headerlink" title="配置settings文件"></a>配置settings文件</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>设置不遵从robots协议</span><br><span class="line"><span class="code">	ROBOTSTXT_OBEY = True 更改为</span></span><br><span class="line"><span class="code">	ROBOTSTXT_OBEY = False</span></span><br><span class="line"><span class="code">	</span></span><br><span class="line"><span class="bullet">- </span>设置请求头信息</span><br><span class="line"><span class="code">	USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'</span></span><br><span class="line"><span class="code">	</span></span><br><span class="line"><span class="bullet">- </span>设置日志等级</span><br><span class="line"><span class="code">	LOG_LEVEL = 'ERROR'</span></span><br><span class="line"><span class="code">	</span></span><br><span class="line"><span class="bullet">- </span>设置错误信息日志文件</span><br><span class="line"><span class="code">	LOG_FILE = '文件名'</span></span><br><span class="line"><span class="code">	</span></span><br><span class="line"><span class="bullet">- </span>开启管道(详情见基于管道的持久化存储步骤6)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="执行工程"><a href="#执行工程" class="headerlink" title="执行工程"></a>执行工程</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>执行命令：scrapy crawl SpiderName</span><br><span class="line"></span><br><span class="line"><span class="bullet">- </span>执行并基于终端存储的命令：scrapy crawl SpiderName -o file.csv</span><br></pre></td></tr></table></figure>
+
+<h3 id="例子：爬取虎牙某一板块"><a href="#例子：爬取虎牙某一板块" class="headerlink" title="例子：爬取虎牙某一板块"></a>例子：爬取虎牙某一板块</h3><p>settings.py配置文件(使用管道，并分别存储到mysql与磁盘)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 请求头</span></span><br><span class="line">USER_AGENT = <span class="string">'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36'</span></span><br><span class="line"><span class="comment"># 关闭robots协议</span></span><br><span class="line">ROBOTSTXT_OBEY = <span class="literal">False</span></span><br><span class="line"><span class="comment"># 设置日志等级</span></span><br><span class="line">LOG_LEVEL = <span class="string">'ERROR'</span></span><br><span class="line"><span class="comment"># 开启管道</span></span><br><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">   <span class="string">'huya.pipelines.HuyaPipeline'</span>: <span class="number">300</span>,	<span class="comment"># 存储到mysql</span></span><br><span class="line">   <span class="string">'huya.pipelines.TextPipeline'</span>: <span class="number">301</span>,	<span class="comment"># 存储到本地磁盘</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>爬虫文件主内容及items：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># items内容：</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuyaItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    title = scrapy.Field()</span><br><span class="line">    name = scrapy.Field()</span><br><span class="line">    hot = scrapy.Field()</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="comment"># 爬虫文件内容：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> huya.items <span class="keyword">import</span> HuyaItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainSpider</span><span class="params">(scrapy.Spider)</span>:</span></span><br><span class="line">    name = <span class="string">'main'</span></span><br><span class="line">	<span class="comment"># 起始url对应虎牙lol板块首页</span></span><br><span class="line">    start_urls = [<span class="string">'https://www.huya.com/g/lol'</span>]</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># 拿到每一个房间的li列表</span></span><br><span class="line">        li_list = response.xpath(<span class="string">'//*[@id="js-live-list"]/li'</span>)</span><br><span class="line">        <span class="keyword">for</span> li <span class="keyword">in</span> li_list:</span><br><span class="line">            <span class="comment"># 拿到每个直播间的标题，直播人，热度</span></span><br><span class="line">            title = li.xpath(<span class="string">'./a[2]/text()'</span>).extract_first()</span><br><span class="line">            name = li.xpath(<span class="string">'./span/span[1]/i/text()'</span>).extract_first()</span><br><span class="line">            hot = li.xpath(<span class="string">'./span/span[2]/i[2]/text()'</span>).extract_first()</span><br><span class="line">			<span class="comment"># 实例化item对象并封装属性</span></span><br><span class="line">            item = HuyaItem()</span><br><span class="line">            item[<span class="string">'title'</span>] = title</span><br><span class="line">            item[<span class="string">'name'</span>] = name</span><br><span class="line">            item[<span class="string">'hot'</span>] = hot</span><br><span class="line">			<span class="comment"># 把item对象提交给管道</span></span><br><span class="line">            <span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure>
+
+<p>管道文件主内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 存储到mysql中</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuyaPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line">    conn = <span class="literal">None</span></span><br><span class="line">    cursor = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">        self.conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>,port=<span class="number">3306</span>,user=<span class="string">'root'</span>,password=<span class="string">'748521'</span>,db=<span class="string">'huya'</span>,charset=<span class="string">'utf8'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line"></span><br><span class="line">        sql = <span class="string">"insert into huya values('%s','%s','%s')"</span>%(item[<span class="string">'title'</span>],item[<span class="string">'name'</span>],item[<span class="string">'hot'</span>])</span><br><span class="line">        self.cursor = self.conn.cursor()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.cursor.execute(sql)</span><br><span class="line">            self.conn.commit()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(e)</span><br><span class="line">            self.conn.rollback()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> item</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line">        self.cursor.close()</span><br><span class="line">        self.conn.close()</span><br><span class="line"><span class="comment"># 存储到本地文件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line">    fp = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.fp = open(<span class="string">'info.txt'</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.fp.write(item[<span class="string">'title'</span>] + <span class="string">"   "</span> + item[<span class="string">'name'</span>] + <span class="string">"   "</span> + item[<span class="string">'hot'</span>] + <span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> item</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self,spider)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.fp.close()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/%E7%88%AC%E8%99%AB%E8%BF%9B%E9%98%B6/" rel="prev" title="爬虫进阶">
+      <i class="fa fa-chevron-left"></i> 爬虫进阶
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/08/scrapy%E8%BF%9B%E9%98%B6/" rel="next" title="scrapy进阶">
+      scrapy进阶 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Scrapy框架"><span class="nav-number">1.</span> <span class="nav-text">Scrapy框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境的安装"><span class="nav-number">1.1.</span> <span class="nav-text">环境的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用方法"><span class="nav-number">1.2.</span> <span class="nav-text">基本使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建工程"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建爬虫文件"><span class="nav-number">1.2.2.</span> <span class="nav-text">创建爬虫文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#爬虫文件的简单内容"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">爬虫文件的简单内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解析数据中的xpath使用"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">解析数据中的xpath使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化存储"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">持久化存储</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-基于终端指令"><span class="nav-number">1.2.2.3.1.</span> <span class="nav-text">1.基于终端指令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-基于管道（重点）"><span class="nav-number">1.2.2.3.2.</span> <span class="nav-text">2.基于管道（重点）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于管道的编码流程"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">基于管道的编码流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置settings文件"><span class="nav-number">1.2.3.</span> <span class="nav-text">配置settings文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行工程"><span class="nav-number">1.2.4.</span> <span class="nav-text">执行工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子：爬取虎牙某一板块"><span class="nav-number">1.2.5.</span> <span class="nav-text">例子：爬取虎牙某一板块</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ywy</p>
+  <div class="site-description" itemprop="description">我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ywy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='150' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
