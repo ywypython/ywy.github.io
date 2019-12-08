@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="你还要我怎样" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://ywypython.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="编码 :  ASCII,gbk,Unicode,utf-8,big5…… 1231, 所有编码本(除了Unicode之外)不能直接互相识别2, 在内存中所有的数据必须是unicode编码存在,出去bytes   1, 文件操作 文件的基本操作 1234f1 = open(&amp;apos;路径&amp;apos;,mode = &amp;apos;模式&amp;apos;,encoding = &amp;apos;编码格式&amp;apos;)f1.write() #写f1.read()  #读f1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件操作">
+<meta property="og:url" content="http:&#x2F;&#x2F;ywypython.github.io&#x2F;2019&#x2F;12&#x2F;08&#x2F;%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:site_name" content="你还要我怎样">
+<meta property="og:description" content="编码 :  ASCII,gbk,Unicode,utf-8,big5…… 1231, 所有编码本(除了Unicode之外)不能直接互相识别2, 在内存中所有的数据必须是unicode编码存在,出去bytes   1, 文件操作 文件的基本操作 1234f1 = open(&amp;apos;路径&amp;apos;,mode = &amp;apos;模式&amp;apos;,encoding = &amp;apos;编码格式&amp;apos;)f1.write() #写f1.read()  #读f1.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-08T15:00:50.359Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ywypython.github.io/2019/12/08/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>文件操作 | 你还要我怎样</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你还要我怎样</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">我尚未开口你先笑场.</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">3</span></a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ywypython.github.io/2019/12/08/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ywy">
+      <meta itemprop="description" content="我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你还要我怎样">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文件操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-08 22:46:06 / 修改时间：23:00:50" itemprop="dateCreated datePublished" datetime="2019-12-08T22:46:06+08:00">2019-12-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>编码 : </p>
+<p>ASCII,gbk,Unicode,utf-8,big5……</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1, 所有编码本(除了Unicode之外)不能直接互相识别</span><br><span class="line"></span><br><span class="line">2, 在内存中所有的数据必须是unicode编码存在,出去bytes</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-文件操作"><a href="#1-文件操作" class="headerlink" title="1, 文件操作"></a>1, 文件操作</h3><ul>
+<li><p>文件的基本操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f1 = open(<span class="string">'路径'</span>,mode = <span class="string">'模式'</span>,encoding = <span class="string">'编码格式'</span>)</span><br><span class="line">f1.write() <span class="comment">#写</span></span><br><span class="line">f1.read()  <span class="comment">#读</span></span><br><span class="line">f1.close()  <span class="comment">#关闭</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码解释:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">open 是内置函数,open底层调用的是操作系统的接口.</span><br><span class="line">f1,变量文件句柄,对文件进行任何的操作,都得通过文件句柄 . 的方式.</span><br><span class="line">encoding 可以不写 ,不写参数默认编码本,操作系统默认的编码:</span><br><span class="line">windows : gbk</span><br><span class="line">linux : utf<span class="number">-8</span></span><br><span class="line">mac : utf<span class="number">-8</span></span><br><span class="line">f.close()  关闭文件句柄</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>文件操作的三部曲</p>
+<ol>
+<li>打开文件</li>
+<li>对文件句柄进行操作</li>
+<li>关闭文件</li>
+</ol>
+</li>
+<li><p>报错原因:</p>
+</li>
+<li><p>UnicodeDecodeError：文件存储时与文件打开时编码本运用不一致。</p>
+</li>
+<li><p>第二个错误： 路径分隔符产生的问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">r'C:\Users\python\Desktop\文件名称.txt'</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="2-文件操作的读"><a href="#2-文件操作的读" class="headerlink" title="2, 文件操作的读"></a>2, 文件操作的读</h3><p>r / r+ / rb / r+ b</p>
+<ul>
+<li>r 只读</li>
+<li>r+ 读写模式</li>
+<li>rb 以二进制方式读  操作的是非文本的文件.(图片视频,音频)</li>
+<li>r + b 以二进制方式读写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># read 全部读出来  **</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8')</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"><span class="comment"># print(content,type(content))</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># read(n) 按照字符读取</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8')</span></span><br><span class="line"><span class="comment"># content = f.read(5)</span></span><br><span class="line"><span class="comment"># print(content)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># readline()</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8')</span></span><br><span class="line"><span class="comment"># print(f.readline())</span></span><br><span class="line"><span class="comment"># print(f.readline())</span></span><br><span class="line"><span class="comment"># print(f.readline())</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># readlines() 返回一个列表，列表中的每个元素是源文件的每一行。</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8')</span></span><br><span class="line"><span class="comment"># l1 = f.readlines()</span></span><br><span class="line"><span class="comment"># for line in l1:</span></span><br><span class="line"><span class="comment">#     print(line)</span></span><br><span class="line"><span class="comment"># # print(l1)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># for 读取</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8')</span></span><br><span class="line"><span class="comment"># for line in f:</span></span><br><span class="line"><span class="comment">#     print(line)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># f = open('pic.jpg',mode='rb')</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"><span class="comment"># print(content)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-文件操作的写"><a href="#3-文件操作的写" class="headerlink" title="3, 文件操作的写"></a>3, 文件操作的写</h3><p>w / w+ / wb / w + b</p>
+<ul>
+<li>w  只写</li>
+<li>w+  写读模式</li>
+<li>wb  以二进制方式写</li>
+<li>w + b 以二进制方式写读</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 没有文件，创建文件，写入内容</span></span><br><span class="line"><span class="comment"># f = open('info.txt',encoding='utf-8',mode='w')</span></span><br><span class="line"><span class="comment"># f.write('随便写一点')</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果文件存在，先清空原文件内容，在写入新内容</span></span><br><span class="line"><span class="comment"># f = open('info.txt',encoding='utf-8',mode='w')</span></span><br><span class="line"><span class="comment"># f.write('python....')</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># wb</span></span><br><span class="line"><span class="comment"># f = open('pic.jpg',mode='rb')</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"><span class="comment"># # print(content)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># f1 = open('pic2.jpg',mode='wb')</span></span><br><span class="line"><span class="comment"># f1.write(content)</span></span><br><span class="line"><span class="comment"># f1.close()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-文件操作的追加"><a href="#4-文件操作的追加" class="headerlink" title="4, 文件操作的追加"></a>4, 文件操作的追加</h3><ul>
+<li>a  追加</li>
+<li>a+  追加写读</li>
+<li>ab  以二进制方式追加</li>
+<li>a + b 以二进制方式追加</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 没有文件创建文件，追加内容</span></span><br><span class="line"><span class="comment"># f = open('info.txt',encoding='utf-8',mode='a')</span></span><br><span class="line"><span class="comment"># f.write('python....')</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 有文件，在原文件的最后面追加内容。</span></span><br><span class="line"><span class="comment"># f = open('info.txt',encoding='utf-8',mode='a')</span></span><br><span class="line"><span class="comment"># f.write('贾科斯，沃利贝尔，乐芙兰，戴安娜')</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-文件操作的其他模式"><a href="#5-文件操作的其他模式" class="headerlink" title="5,文件操作的其他模式"></a>5,文件操作的其他模式</h3><ul>
+<li>r+    先读后写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 读并追加  # 顺序不能错误。</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8', mode='r+')</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"><span class="comment"># print(content)</span></span><br><span class="line"><span class="comment"># f.write('人的一切痛苦，本质都是对自己无能的愤怒。')</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误示例：</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8', mode='r+')</span></span><br><span class="line"><span class="comment"># f.write('人的一切痛苦,,,本质都是对自己无能的愤怒,,,')</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"><span class="comment"># print(content)</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-文件操作的其他功能"><a href="#6-文件操作的其他功能" class="headerlink" title="6,  文件操作的其他功能"></a>6,  文件操作的其他功能</h3><ul>
+<li><p>总结:</p>
+</li>
+<li><p>三个大方向</p>
+<ul>
+<li>读，四种模式： r rb r+ r+b</li>
+<li>写，四种模式 : w,wb, w+,w+b</li>
+<li>追加 四种模式: a, ab, a+,a+b</li>
+<li>相对应的功能 :对文件句柄的操作：read read(n) readline() readlines() write()</li>
+</ul>
+</li>
+<li><p>tell  获取光标位置,单位是字节</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tell  获取光标的位置  单位字节.</span></span><br><span class="line"><span class="comment"># f = open('info.txt',encoding = 'utf-8')</span></span><br><span class="line"><span class="comment"># print(f.tell())</span></span><br><span class="line"><span class="comment"># content = f.read()</span></span><br><span class="line"> <span class="comment"># print(f.tell())</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>seek  调整光标位置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># obj = open('p.txt',mode='r',encoding='utf-8')</span></span><br><span class="line"><span class="comment"># obj.seek(4) # 跳转到指定字节位置</span></span><br><span class="line"><span class="comment"># data = obj.read()</span></span><br><span class="line"><span class="comment"># obj.close()</span></span><br><span class="line"><span class="comment"># print(data)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>flush  强制刷新</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># flush 强制刷新</span></span><br><span class="line"><span class="comment"># f = open('info.txt', encoding='utf-8',mode='w')</span></span><br><span class="line"><span class="comment"># f.write('fdshdsjgsdlkjfdf')</span></span><br><span class="line"><span class="comment"># f.flush()</span></span><br><span class="line"><span class="comment"># f.close()</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="7-打开文件的另一种方式"><a href="#7-打开文件的另一种方式" class="headerlink" title="7,  打开文件的另一种方式"></a>7,  打开文件的另一种方式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># with open('文件的读',encoding='utf-8') as f1:</span></span><br><span class="line"><span class="comment">#     print(f1.read())</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 优点2：</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'info.txt'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f1,\</span><br><span class="line">        open(<span class="string">'info2.txt'</span>, encoding=<span class="string">'utf-8'</span>, mode=<span class="string">'w'</span>)<span class="keyword">as</span> f2:</span><br><span class="line">    print(f1.read())</span><br><span class="line">    f2.write(<span class="string">'hfdsjkghkajhsdjg'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-文件操作的改"><a href="#8-文件操作的改" class="headerlink" title="8,  文件操作的改"></a>8,  文件操作的改</h3><ul>
+<li><p>文件操作改的流程:</p>
+<ol>
+<li>以读的模式打开原文件</li>
+<li>以写的模式创建一个新文件</li>
+<li>将原文件的内容读出来修改成新的内容写入文件</li>
+<li>将原文件删除</li>
+<li>将新文件重命名为原文件</li>
+</ol>
+</li>
+<li><p>具体代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'info.txt'</span>,mode = <span class="string">'r'</span>,encoding = <span class="string">'utf-8'</span>) <span class="keyword">as</span> f1,open(<span class="string">'info.bak'</span>,mode = <span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>) <span class="keyword">as</span> f2:</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> f1:</span><br><span class="line">        new_item = item.replace(<span class="string">'德玛西亚'</span>,<span class="string">'戴安娜牛逼'</span>)</span><br><span class="line">        f2.write(new_item)</span><br><span class="line">os.remove(<span class="string">'info.txt'</span>)</span><br><span class="line">os.rename(<span class="string">'info.bak'</span>,<span class="string">'德玛西亚'</span>)</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="基础数据类型">
+      <i class="fa fa-chevron-left"></i> 基础数据类型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Cre%E6%A8%A1%E5%9D%97/" rel="next" title="正则表达式和re模块">
+      正则表达式和re模块 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文件操作"><span class="nav-number">1.</span> <span class="nav-text">1, 文件操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-文件操作的读"><span class="nav-number">2.</span> <span class="nav-text">2, 文件操作的读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-文件操作的写"><span class="nav-number">3.</span> <span class="nav-text">3, 文件操作的写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-文件操作的追加"><span class="nav-number">4.</span> <span class="nav-text">4, 文件操作的追加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-文件操作的其他模式"><span class="nav-number">5.</span> <span class="nav-text">5,文件操作的其他模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-文件操作的其他功能"><span class="nav-number">6.</span> <span class="nav-text">6,  文件操作的其他功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-打开文件的另一种方式"><span class="nav-number">7.</span> <span class="nav-text">7,  打开文件的另一种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-文件操作的改"><span class="nav-number">8.</span> <span class="nav-text">8,  文件操作的改</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ywy</p>
+  <div class="site-description" itemprop="description">我想任性我就任性,我想倔强我也能倔强,看你们谁能把我怎么样.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ywy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='150' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
